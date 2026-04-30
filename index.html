@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quantum Music — A live performance instrument from the quantum world</title>
+<meta name="description" content="A real-time generative music system driven by quantum measurement. Built by Krishna Kalesan." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ===========================================================
+   DESIGN TOKENS
+   =========================================================== */
+:root {
+  --ink: #F2EBDD;
+  --ink-dim: #A39B89;
+  --ink-faint: #5C5648;
+  --bg: #0B0A0E;
+  --bg-rise: #131218;
+  --bg-sink: #07070A;
+  --cool: #6B6FE0;
+  --cool-dim: #3D3F7E;
+  --warm: #E8A14C;
+  --warm-dim: #8C5C20;
+  --mid: #79B8A2;
+  --rule: rgba(242, 235, 221, 0.08);
+
+  --display: 'Fraunces', 'Times New Roman', Georgia, serif;
+  --body: 'Crimson Pro', 'Times New Roman', Georgia, serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+
+  --col: min(720px, 92vw);
+  --col-wide: min(1080px, 94vw);
+  --gutter: clamp(1.5rem, 4vw, 4rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.6;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+main { position: relative; z-index: 2; }
+
+/* ===========================================================
+   TYPOGRAPHY
+   =========================================================== */
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  font-variation-settings: 'opsz' 144;
+}
+h1 { font-size: clamp(3.2rem, 9vw, 7.5rem); }
+h2 { font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 1.5rem; }
+h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.75rem; }
+h4 { font-size: 1.15rem; font-style: italic; font-weight: 400; color: var(--ink-dim); }
+
+p { margin-bottom: 1.2em; max-width: 60ch; }
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-faint);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+a:hover { text-decoration-color: var(--warm); color: var(--warm); }
+
+em { font-style: italic; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.numeral {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--cool);
+  font-size: 1.6em;
+  line-height: 1;
+}
+
+.dropcap::first-letter {
+  font-family: var(--display);
+  font-size: 4.2em;
+  float: left;
+  line-height: 0.85;
+  margin: 0.1em 0.08em -0.1em 0;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.pull {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.25;
+  color: var(--ink);
+  border-left: 1px solid var(--cool);
+  padding: 0.4em 0 0.4em 1.2em;
+  margin: 2.5em 0;
+  max-width: 26ch;
+}
+
+.pull cite {
+  display: block;
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 1rem;
+}
+
+code, .mono { font-family: var(--mono); font-size: 0.88em; }
+
+/* ===========================================================
+   LAYOUT
+   =========================================================== */
+section {
+  padding: clamp(5rem, 12vh, 9rem) var(--gutter);
+  position: relative;
+}
+
+.col { width: var(--col); margin-inline: auto; }
+.col-wide { width: var(--col-wide); margin-inline: auto; }
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.section-label .num {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--cool);
+  font-weight: 300;
+}
+
+/* ===========================================================
+   HERO
+   =========================================================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: clamp(3rem, 6vh, 5rem);
+  padding-bottom: clamp(3rem, 6vh, 5rem);
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.hero-top .right { text-align: right; }
+
+.hero-title {
+  margin-top: clamp(2rem, 8vh, 5rem);
+  width: var(--col-wide);
+  margin-inline: auto;
+}
+.hero-title h1 {
+  font-weight: 300;
+  font-variation-settings: 'opsz' 144;
+}
+.hero-title .quantum {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--cool);
+}
+.hero-title .music {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--warm);
+}
+.hero-tagline {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--ink-dim);
+  margin-top: 1.5rem;
+  max-width: 44ch;
+}
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+  width: var(--col-wide);
+  margin-inline: auto;
+}
+.hero-meta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  line-height: 2;
+}
+.hero-meta strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.scroll-cue {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.scroll-cue::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--ink-dim), transparent);
+}
+
+/* ===========================================================
+   AUDIO TOGGLE
+   =========================================================== */
+.audio-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+  background: rgba(11, 10, 14, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 0.6rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.audio-toggle:hover { border-color: var(--warm); color: var(--warm); }
+.audio-toggle .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ink-dim); transition: background 0.3s;
+}
+.audio-toggle.active .dot {
+  background: var(--warm);
+  box-shadow: 0 0 8px var(--warm);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ===========================================================
+   PILLAR CARDS
+   =========================================================== */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+.pillar {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.5rem;
+}
+.pillar .num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--cool);
+  margin-bottom: 0.4rem;
+}
+.pillar h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+.pillar p {
+  font-size: 0.95rem;
+  color: var(--ink-dim);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ===========================================================
+   BUTTONS
+   =========================================================== */
+button.primary, button.ghost {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  transition: all 0.25s ease;
+}
+button.primary:hover { background: var(--ink); color: var(--bg); }
+button.ghost { border-color: var(--rule); color: var(--ink-dim); }
+button.ghost:hover { border-color: var(--ink-dim); color: var(--ink); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ===========================================================
+   LIVE DEMO
+   =========================================================== */
+.demo-shell {
+  margin: 3rem 0;
+  background: var(--bg-sink);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.demo-header .led {
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink-faint);
+  margin-right: 0.6rem;
+  vertical-align: middle;
+  transition: background 0.2s;
+}
+.demo-header .led.on {
+  background: var(--warm);
+  box-shadow: 0 0 10px var(--warm);
+}
+.demo-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 760px) {
+  .demo-stage { grid-template-columns: 1.4fr 1fr; }
+}
+.demo-canvas-wrap {
+  aspect-ratio: 1.4 / 1;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(107, 111, 224, 0.12), transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(232, 161, 76, 0.10), transparent 60%),
+    var(--bg-sink);
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+@media (max-width: 760px) {
+  .demo-canvas-wrap { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+#demo-canvas { width: 100%; height: 100%; display: block; }
+
+.demo-side {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: space-between;
+}
+.demo-readout {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 2;
+  color: var(--ink-dim);
+}
+.demo-readout .row {
+  display: flex; justify-content: space-between;
+  border-bottom: 1px dashed var(--rule);
+  padding: 0.4rem 0;
+}
+.demo-readout .row:last-child { border-bottom: none; }
+.demo-readout .val {
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.demo-readout .val.cool { color: var(--cool); }
+.demo-readout .val.warm { color: var(--warm); }
+
+.demo-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.demo-controls .switch-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.switch {
+  position: relative;
+  width: 38px; height: 20px;
+  background: var(--bg-rise);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+.switch::after {
+  content: ''; position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--ink-dim);
+  transition: transform 0.25s ease, background 0.25s;
+}
+.switch.on { border-color: var(--warm); }
+.switch.on::after {
+  transform: translateX(18px);
+  background: var(--warm);
+}
+
+.distribution {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 60px;
+  margin-top: 0.75rem;
+}
+.distribution .bar {
+  flex: 1;
+  background: var(--bg-rise);
+  border: 1px solid var(--rule);
+  border-bottom: none;
+  position: relative;
+  transition: height 0.4s ease;
+  height: 4px;
+  min-height: 4px;
+}
+.distribution .bar.fill { background: linear-gradient(to top, var(--cool-dim), var(--cool)); }
+.distribution .bar.fill-warm { background: linear-gradient(to top, var(--warm-dim), var(--warm)); }
+.distribution-labels {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.4rem;
+}
+.distribution-labels span {
+  flex: 1;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+/* ===========================================================
+   ARCHITECTURE / TECH
+   =========================================================== */
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  margin: 2rem 0;
+  border: 1px solid var(--rule);
+}
+.stack-item { background: var(--bg-rise); padding: 1.5rem; }
+.stack-item .label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 0.5rem;
+}
+.stack-item .name {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: 0.4rem;
+}
+.stack-item p {
+  font-size: 0.9rem;
+  color: var(--ink-dim);
+  margin: 0;
+}
+
+.arch-diagram {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: var(--bg-sink);
+  border: 1px solid var(--rule);
+}
+.arch-diagram svg { width: 100%; height: auto; max-width: 720px; margin: 0 auto; display: block; }
+
+pre.code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  background: var(--bg-sink);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--cool);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 2rem 0;
+  color: var(--ink-dim);
+}
+pre.code .k { color: var(--warm); font-weight: 500; }
+pre.code .s { color: var(--mid); }
+pre.code .c { color: var(--ink-faint); font-style: italic; }
+pre.code .v { color: var(--cool); }
+
+/* ===========================================================
+   MEDIA — videos and images
+   =========================================================== */
+.media {
+  margin: 3rem 0;
+  background: var(--bg-rise);
+  border: 1px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.media video, .media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+.media .caption {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding: 0.9rem 1.2rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* ===========================================================
+   REFERENCES
+   =========================================================== */
+.references {
+  margin: 2.5rem 0;
+  padding: 2rem 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.references h4 {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 1.2rem;
+}
+.references ol {
+  list-style: none;
+  counter-reset: ref;
+}
+.references li {
+  counter-increment: ref;
+  padding: 0.6rem 0 0.6rem 2.4rem;
+  position: relative;
+  font-size: 0.92rem;
+  color: var(--ink-dim);
+  line-height: 1.55;
+  border-bottom: 1px dashed var(--rule);
+}
+.references li:last-child { border-bottom: none; }
+.references li::before {
+  content: counter(ref, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--cool);
+}
+.references li em {
+  color: var(--ink);
+  font-style: italic;
+}
+
+/* ===========================================================
+   FOOTER
+   =========================================================== */
+footer {
+  padding: 5rem var(--gutter) 3rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  position: relative;
+  z-index: 2;
+}
+.footer-grid {
+  width: var(--col-wide);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.footer-grid h5 {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+.footer-grid ul { list-style: none; line-height: 2; }
+.footer-bottom {
+  width: var(--col-wide);
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 600px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 1rem; }
+}
+
+/* ===========================================================
+   ANIMATIONS
+   =========================================================== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.hero h1 .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: word-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero h1 .word:nth-child(1) { animation-delay: 0.4s; }
+.hero h1 .word:nth-child(2) { animation-delay: 0.55s; }
+.hero h1 .word:nth-child(3) { animation-delay: 0.7s; }
+.hero h1 .word:nth-child(4) { animation-delay: 0.85s; }
+@keyframes word-rise { to { opacity: 1; transform: translateY(0); } }
+.hero-tagline { opacity: 0; animation: fade-in-soft 1.6s ease 1.2s forwards; }
+.hero-meta, .scroll-cue { opacity: 0; animation: fade-in-soft 1.6s ease 1.5s forwards; }
+.hero-top { opacity: 0; animation: fade-in-soft 1.6s ease 0.2s forwards; }
+@keyframes fade-in-soft { to { opacity: 1; } }
+
+/* ===========================================================
+   UTILITIES
+   =========================================================== */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--rule), transparent);
+  margin: 4rem 0;
+}
+.text-cool { color: var(--cool); }
+.text-warm { color: var(--warm); }
+.text-mid  { color: var(--mid); }
+.text-dim  { color: var(--ink-dim); }
+.italic { font-style: italic; }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<button class="audio-toggle" id="audioToggle" aria-pressed="false">
+  <span class="dot"></span>
+  <span class="label">Listen while reading</span>
+</button>
+
+<main>
+
+<!-- ===========================================================
+     HERO
+     =========================================================== -->
+<section class="hero">
+  <div class="hero-top">
+    <div class="left">A live performance instrument</div>
+    <div class="right">Music · Quantum computing<br/>Real-time</div>
+  </div>
+
+  <div class="hero-title">
+    <h1>
+      <span class="word">A</span>
+      <span class="word quantum">quantum</span>
+      <span class="word">in</span>
+      <span class="word music">music.</span>
+    </h1>
+    <p class="hero-tagline">A live instrument that turns quantum measurement into music, in real time. Built to make the strangest physics in the universe playable.</p>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-meta">
+      <div><strong>Krishna Kalesan</strong></div>
+      <div>Music Technology · 2026</div>
+    </div>
+    <div class="scroll-cue">Read on</div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     I - THE CONCEPT
+     =========================================================== -->
+<section id="concept">
+  <div class="col fade-in">
+    <div class="section-label">
+      <span class="num"> I</span>
+      <span class="eyebrow">The concept</span>
+    </div>
+
+    <h2>What does a quantum computer <em>sound</em> like?</h2>
+    <p class="dropcap">For a hundred years quantum mechanics has told us something stubborn and strange about reality: at its smallest scale, the universe doesn't make decisions until it's asked. A particle isn't here <em>or</em> there - it's both, until it's measured. This is not a metaphor. It's the deepest, best-tested theory of the physical world we have, and it sits behind every transistor, every laser, every MRI scan.</p>
+
+    <p>Quantum computers are the first machines built to think in this language directly. They don't process ones and zeros so much as <em>probabilities</em> - vast clouds of possibility that collapse into definite answers only at the moment of measurement. They are very nearly the strangest engineering project humans have ever undertaken, and they will reshape cryptography, chemistry, drug discovery and machine learning over the coming decade.</p>
+
+    <p>This project asks a question those fields don't usually consider: if a quantum computer's natural language is probability, and music's natural language is the unfolding of events through time, what happens when you let the first speak through the second?</p>
+
+    <p>The answer, I've found, is a kind of music no human or conventional algorithm could compose. It is not random - randomness sounds like noise. It is <em>structured uncertainty</em>: notes that emerge from the actual mathematics of quantum measurement, biased by the same correlations physicists call <span class="text-cool italic">entanglement</span>, played in real time through a software synthesiser and shaped, on stage, by a performer.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="num">i.</div>
+        <h3>Superposition</h3>
+        <p>A qubit doesn't pick a value until measured. Until then, it holds every possibility at once - a coin spinning in the air, not a coin on the table.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">ii.</div>
+        <h3>Measurement</h3>
+        <p>Observing the qubit collapses its possibilities into one definite outcome. The act of looking is what forces the universe to choose.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">iii.</div>
+        <h3>Entanglement</h3>
+        <p>Two qubits can be linked so completely that their measurements stay correlated forever. This is the structure that turns noise into music.</p>
+      </div>
+    </div>
+
+    <!-- Visual: a quantum measurement made visible -->
+    <div class="media">
+      <video src="td-visuals.mp4" controls autoplay loop muted playsinline poster="poster-td.jpg" preload="metadata"></video>
+      <div class="caption">Each glowing cluster is one quantum measurement. Eight corners - eight possible outcomes - but the universe never lights all of them.</div>
+    </div>
+
+    <p class="pull">"Until you measure, every outcome is real at once. The act of looking is what forces the universe to choose."</p>
+
+    <p>The piece you're about to hear in the next section is built on three qubits - eight possible measurement outcomes - mapped onto the notes of a musical scale. With entanglement on, only two of the eight outcomes are possible. With it off, all eight occur with equal probability. You can hear the difference. <em>That</em> is what makes this music quantum.</p>
+  </div>
+</section>
+
+<!-- ===========================================================
+     II - TRY IT YOURSELF
+     =========================================================== -->
+<section id="try">
+  <div class="col-wide fade-in">
+    <div class="section-label">
+      <span class="num"> II</span>
+      <span class="eyebrow">Try it yourself</span>
+    </div>
+
+    <h2>Listen to a quantum measurement.</h2>
+    <p>Below is a live, in-browser version of the same circuit that drives the full installation. It runs a 3-qubit simulation, plays the resulting note through your browser's audio engine, and visualises the eight possible measurement outcomes as the corners of a cube. Toggle entanglement on and off - and watch the distribution change.</p>
+
+    <div class="demo-shell">
+      <div class="demo-header">
+        <div><span class="led" id="demoLed"></span>Quantum_Live · Browser Simulator</div>
+        <div class="mono" id="shotCounter">Shots: 0</div>
+      </div>
+      <div class="demo-stage">
+        <div class="demo-canvas-wrap">
+          <canvas id="demo-canvas"></canvas>
+        </div>
+        <div class="demo-side">
+          <div>
+            <div class="demo-readout">
+              <div class="row"><span>Last measurement</span><span class="val" id="lastBinary">—</span></div>
+              <div class="row"><span>Index (0-7)</span><span class="val cool" id="lastIndex">—</span></div>
+              <div class="row"><span>MIDI note</span><span class="val warm" id="lastNote">—</span></div>
+              <div class="row"><span>Frequency</span><span class="val" id="lastFreq">—</span></div>
+            </div>
+            <div class="distribution" id="distribution">
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+            <div class="distribution-labels">
+              <span>000</span><span>001</span><span>010</span><span>011</span>
+              <span>100</span><span>101</span><span>110</span><span>111</span>
+            </div>
+          </div>
+          <div class="demo-controls">
+            <div class="switch-row">
+              <span>Entanglement</span>
+              <div class="switch on" id="entSwitch" role="switch" aria-checked="true" tabindex="0"></div>
+            </div>
+            <div class="switch-row">
+              <span>Auto-play</span>
+              <div class="switch" id="autoSwitch" role="switch" aria-checked="false" tabindex="0"></div>
+            </div>
+            <button class="primary" id="measureBtn">Measure once</button>
+            <button class="ghost" id="resetBtn">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-dim" style="font-size: 0.9rem;"><em>Note:</em> the simulator runs entirely in your browser - no server, no API. The audio is generated live by the Web Audio API. With entanglement enabled, the circuit is <code>H(0) → CX(0,1) → CX(1,2) → measure</code>, identical to the GHZ state used in the full installation.</p>
+
+    <h3 style="margin-top: 5rem;">The system, running.</h3>
+    <p>What follows is a walkthrough of the live system in action - the Python script measuring three qubits continuously, the TouchDesigner display, and Logic Pro receiving MIDI and voicing every measurement through a software instrument. Each pad press on the controller switches scale or circuit mode, and you can see the change print to the terminal as the music shifts. The same data is simultaneously sent over OSC to TouchDesigner, which produces the visual layer shown earlier.</p>
+
+    <div class="media">
+      <video src="system-demo.mp4" controls poster="poster-system.jpg" preload="metadata"></video>
+      <div class="caption">The full software stack - Vs code, TouchDesigner, and Logic Pro - running together as one performable instrument.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     III - HOW IT'S BUILT
+     =========================================================== -->
+<section id="build">
+  <div class="col fade-in">
+    <div class="section-label">
+      <span class="num">§ III</span>
+      <span class="eyebrow">How it's built</span>
+    </div>
+
+    <h2>The architecture.</h2>
+    <p>Five layers, in series. A quantum circuit generates a measurement; the measurement is mapped to a musical scale; the resulting MIDI is sent to a digital audio workstation; the same data is broadcast over OSC to a real-time visual engine; the performer shapes the result live with a hardware controller.</p>
+
+    <div class="arch-diagram">
+      <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System architecture diagram">
+        <defs>
+          <marker id="arrow-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 2 L9 5 L0 8 z" fill="#A39B89"/>
+          </marker>
+        </defs>
+        <rect x="260" y="30" width="200" height="60" fill="none" stroke="#6B6FE0" stroke-width="1"/>
+        <text x="360" y="55" text-anchor="middle" fill="#F2EBDD" font-family="Fraunces, serif" font-style="italic" font-size="16">Python + Qiskit</text>
+        <text x="360" y="75" text-anchor="middle" fill="#A39B89" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">QUANTUM SIMULATOR</text>
+
+        <line x1="320" y1="90" x2="180" y2="160" stroke="#A39B89" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <text x="240" y="120" text-anchor="middle" fill="#A39B89" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">MIDI</text>
+
+        <line x1="400" y1="90" x2="540" y2="160" stroke="#A39B89" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <text x="480" y="120" text-anchor="middle" fill="#A39B89" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">OSC</text>
+
+        <rect x="80" y="160" width="200" height="60" fill="none" stroke="#E8A14C" stroke-width="1"/>
+        <text x="180" y="185" text-anchor="middle" fill="#F2EBDD" font-family="Fraunces, serif" font-style="italic" font-size="16">Logic Pro</text>
+        <text x="180" y="205" text-anchor="middle" fill="#A39B89" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">SOFTWARE INSTRUMENT</text>
+
+        <rect x="440" y="160" width="200" height="60" fill="none" stroke="#79B8A2" stroke-width="1"/>
+        <text x="540" y="185" text-anchor="middle" fill="#F2EBDD" font-family="Fraunces, serif" font-style="italic" font-size="16">TouchDesigner</text>
+        <text x="540" y="205" text-anchor="middle" fill="#A39B89" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">VISUAL ENGINE</text>
+
+        <line x1="180" y1="220" x2="180" y2="280" stroke="#A39B89" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <text x="180" y="310" text-anchor="middle" fill="#F2EBDD" font-family="Fraunces, serif" font-style="italic" font-size="14">Sound</text>
+
+        <line x1="540" y1="220" x2="540" y2="280" stroke="#A39B89" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <text x="540" y="310" text-anchor="middle" fill="#F2EBDD" font-family="Fraunces, serif" font-style="italic" font-size="14">Image</text>
+      </svg>
+    </div>
+
+    <h3 style="margin-top: 4rem;">The stack.</h3>
+    <div class="stack">
+      <div class="stack-item">
+        <div class="label">Quantum</div>
+        <div class="name">Qiskit</div>
+        <p>IBM's open-source quantum framework. Constructs and simulates the 3-qubit circuit that drives every note. The same code can be run on real IBM hardware via the cloud.</p>
+      </div>
+      <div class="stack-item">
+        <div class="label">Audio</div>
+        <div class="name">Mido + Logic Pro</div>
+        <p>MIDI is sent over a virtual IAC bus into Logic Pro, where any software instrument can voice the measurements. The system is timbre-agnostic - choose any sound.</p>
+      </div>
+      <div class="stack-item">
+        <div class="label">Visual</div>
+        <div class="name">TouchDesigner</div>
+        <p>OSC carries the same quantum data into a node-based visual engine. Particles spawn at cube corners corresponding to the measurement bits, coloured by pitch.</p>
+      </div>
+      <div class="stack-item">
+        <div class="label">Performance</div>
+        <div class="name">Akai MPK Mini</div>
+        <p>A pad and knob controller for live modulation. Switch scales, swap circuit modes, modulate tempo and density during performance.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 4rem;">Live, from the terminal.</h3>
+    <p>The Python script is intentionally short - the project's value lies in what it routes, not in cleverness of code. Below: the source on top and the live terminal at the bottom. Each pad press on the MPK Mini prints a line - <code>scale → Blues</code>, <code>mode → GHZ</code>, <code>PANIC: all notes off</code> - proving the loop is running, listening, and switching state in real time as the performer plays.</p>
+
+    <div class="media">
+      <video src="code-walkthrough.mp4" controls poster="poster-code.jpg" preload="metadata" muted></video>
+      <div class="caption">quantum_live.py and its terminal - the instrument as it sees itself, mid-performance.</div>
+    </div>
+
+    <h3 style="margin-top: 4rem;">The core loop.</h3>
+    <p>Stripped to its essentials, the engine of the whole system fits in twenty lines.</p>
+
+    <pre class="code"><span class="c"># quantum_live.py - the heart of the system</span>
+<span class="k">from</span> qiskit <span class="k">import</span> QuantumCircuit
+<span class="k">from</span> qiskit_aer <span class="k">import</span> AerSimulator
+<span class="k">from</span> pythonosc.udp_client <span class="k">import</span> SimpleUDPClient
+<span class="k">import</span> mido, time
+
+<span class="v">SCALE</span> = [60, 62, 64, 65, 67, 69, 71, 72]   <span class="c"># C major</span>
+<span class="v">simulator</span> = AerSimulator()
+<span class="v">port</span> = mido.open_output(<span class="s">'IAC Driver Bus 1'</span>)
+<span class="v">osc</span>  = SimpleUDPClient(<span class="s">"127.0.0.1"</span>, 9000)
+
+<span class="k">while</span> <span class="v">True</span>:
+    qc = QuantumCircuit(3)
+    qc.h(0)                  <span class="c"># superposition</span>
+    qc.cx(0, 1)              <span class="c"># entangle 0 → 1</span>
+    qc.cx(1, 2)              <span class="c"># entangle 1 → 2 (GHZ state)</span>
+    qc.measure_all()
+
+    binary = <span class="v">list</span>(simulator.run(qc, shots=1).result().get_counts().keys())[0]
+    note   = <span class="v">SCALE</span>[<span class="v">int</span>(binary, 2)]
+
+    osc.send_message(<span class="s">"/quantum/note"</span>, note)
+    osc.send_message(<span class="s">"/quantum/binary"</span>, binary)
+
+    port.send(mido.Message(<span class="s">'note_on'</span>, note=note, velocity=120))
+    time.sleep(0.4)
+    port.send(mido.Message(<span class="s">'note_off'</span>, note=note, velocity=0))</pre>
+
+    <h3 style="margin-top: 4rem;">Three modes of being quantum.</h3>
+    <p>The performer can switch between three different quantum circuits live, each producing a distinct musical character:</p>
+
+    <ul style="margin-left: 1.5rem; margin-bottom: 2rem;">
+      <li style="margin-bottom: 0.6em;"><strong class="text-cool">GHZ mode</strong> - three qubits maximally entangled. Only two measurement outcomes are possible: <code>000</code> or <code>111</code>. The result is starkly minimal - two notes, alternating, far apart in pitch.</li>
+      <li style="margin-bottom: 0.6em;"><strong class="text-mid">BELL mode</strong> - two qubits entangled, one free. Four outcomes occur with equal probability. The most musical setting - paired notes that always rise or fall together.</li>
+      <li style="margin-bottom: 0.6em;"><strong class="text-warm">FREE mode</strong> - three independent superpositions, no entanglement. All eight notes occur with equal probability. The least quantum, but the most melodically varied.</li>
+    </ul>
+
+    <p>The mode itself becomes a compositional parameter. Switching from GHZ to FREE during a performance is the quantum equivalent of changing key - except what's changing isn't the harmony, it's how much <em>quantum-ness</em> is shaping the music in that moment.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===========================================================
+     IV - WHY THIS MATTERS
+     =========================================================== -->
+<section id="why">
+  <div class="col fade-in">
+    <div class="section-label">
+      <span class="num">§ IV</span>
+      <span class="eyebrow">Why this matters</span>
+    </div>
+
+    <h2>Music technology meets the next computational paradigm.</h2>
+
+    <p>The history of music technology is the history of new physical principles being borrowed into the studio. The valve gave us the electric guitar. The transistor gave us the synthesiser. Digital signal processing gave us sampling, plug-ins, the entire modern producer's toolkit. Each of these waves of innovation began far outside music - in defence labs, in computer science departments, in radio engineering - and arrived in our practice through the work of artists willing to misuse the new tools until they sang.</p>
+
+    <p>Quantum computing is the next of those waves, and it has barely begun to touch music. A handful of pioneering projects have explored the territory: Eduardo Reck Miranda's research on <em>quantum computer music</em> at the University of Plymouth has produced compositions that use real quantum hardware as a generative source [1]. Omar Costa Hamido's <em>Quantum Synth</em> proposes circuits as instruments in their own right [2]. The <em>Quantum Music Playground</em> from IBM Research re-imagines the qubit as a tile in a step sequencer [3]. These are early experiments in what will become a much larger field.</p>
+
+    <p>What's distinctive about this project, I hope, is not the use of quantum measurements - others have done that - but the integration. The quantum layer, the audio engine, the immersive visualisation, and the hardware controller all run as one continuous, performable system. The performer is not pressing a button to trigger a recording. They are <em>playing</em> a quantum process, with their hands, in real time.</p>
+
+    <p class="pull">"What's at stake here is not whether quantum computing makes interesting music. It clearly can. The question is what music will become when the strangeness of the physical world becomes part of the musician's vocabulary."</p>
+
+    <p>Within five years, quantum hardware will be substantially more accessible than it is today. Cloud APIs from IBM, Google, IonQ and others already let any musician with a laptop send a circuit to a real quantum processor and hear back a result in seconds. The technical barrier has fallen dramatically, even since this project started. What hasn't yet developed is the artistic vocabulary - the techniques, conventions, and aesthetic instincts that turn a new technology into a living musical practice. That vocabulary will be built by musicians, not physicists.</p>
+
+    <p>This project is one small contribution to that vocabulary. It demonstrates that quantum-driven music can be expressive, controllable, performable, and immediate - not just an academic curiosity, but a real instrument that you can stand behind and play.</p>
+
+    <div class="references">
+      <h4>References &amp; further reading</h4>
+      <ol>
+        <li><em>Eduardo Reck Miranda</em> - <em>Quantum Computer Music: Foundations, Methods and Advanced Concepts</em> (Springer, 2022). The foundational text on the field; covers theory, history, and practical methods for composing with quantum circuits.</li>
+        <li><em>Omar Costa Hamido</em> - <em>Quantum Synth</em> and <em>QAC Toolkit</em>. A composer-researcher developing software that brings quantum circuit design directly into Max/MSP.</li>
+        <li><em>James Weaver et al.</em> - <em>Quantum Music Playground</em> (IBM Research). A web-based step sequencer where each row is a qubit, demonstrating quantum measurement as compositional material.</li>
+        <li><em>IBM Quantum</em> - Qiskit documentation and free cloud access to real quantum processors. <a href="https://qiskit.org" target="_blank" rel="noopener">qiskit.org</a></li>
+        <li><em>Derivative</em> - TouchDesigner reference and community. <a href="https://derivative.ca" target="_blank" rel="noopener">derivative.ca</a></li>
+        <li><em>ISMIR</em> &amp; <em>NIME</em> - Music technology conferences (International Society for Music Information Retrieval; New Interfaces for Musical Expression) where quantum-driven systems have begun to appear as papers and performances.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     V - REFLECTION
+     =========================================================== -->
+<section id="reflection">
+  <div class="col fade-in">
+    <div class="section-label">
+      <span class="num">§ V</span>
+      <span class="eyebrow">Reflection</span>
+    </div>
+
+    <h2>How I worked.</h2>
+
+    <p>This project came about because I was curious. During my placement, I attended a music technology event where I was first introduced to quantum computing in a creative context. The idea stayed with me. I began going to talks, visiting exhibitions across London, and learning Qiskit so I could work with quantum systems hands-on.</p>
+
+    <p>The work itself unfolded in three loops.</p>
+
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">1. Getting to know the system.</h4>
+    <p>I started by building simple quantum circuits and watching how they behaved. I plotted probability distributions and used the Bloch sphere as a mental model for how qubit states evolve. None of this was about music yet - it was about developing an intuition for a system whose rules are genuinely strange.</p>
+
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">2. Learning to listen.</h4>
+    <p>The next loop was about translation. I converted quantum measurements into MIDI and brought them into Logic Pro. At first the results sounded completely random, and that forced me to question what <em>musical</em> actually means in this context.</p>
+
+    <p>The shift came when I stopped treating the quantum part as a randomness generator and started treating it as a compositional tool. A simple superposition - three independent Hadamard gates - produces a flat, uniform distribution: that's not music, that's noise. But when I introduced entanglement, particularly GHZ states with their perfect correlations between qubits, the data became structured. Notes started to relate to each other. The output stopped sounding like a random number generator and started sounding like a system with internal logic.</p>
+
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">3. Building the instrument.</h4>
+    <p>The final loop was about integration and performance. I connected Python with TouchDesigner so the visuals could update in real time. I added the MPK Mini as a control surface. I worked on reducing latency until the relationship between gesture, sound, and image became <em>perceptible</em> to an audience - which is the threshold that separates a software demo from a musical instrument.</p>
+
+    <p>Each loop involved trial, failure, and adjustment, but together they shaped a system in which quantum behaviour can be experienced rather than just observed.</p>
+
+    <h3 style="margin-top: 3rem;">What I learned.</h3>
+    <p>Four things, in roughly this order of importance:</p>
+
+    <ol style="margin-left: 1.5rem; margin-bottom: 2rem;">
+      <li style="margin-bottom: 0.8em;"><strong>The interface is the project.</strong> Quantum mathematics is well-documented; music technology is well-documented; the bridge between them is where the real work lives. Decisions about <em>what</em> to surface - entanglement rather than just measurement; circuit-mode switching as a compositional control; pitch-driven colour as a visual link - are the substance of the project, not its implementation.</li>
+      <li style="margin-bottom: 0.8em;"><strong>Real-time matters more than physical authenticity.</strong> I chose Qiskit's local simulator over IBM's real hardware because the latency from cloud quantum processors makes live performance impossible. The physics is identical; the timing is not. This is a recurring tension in music technology - between fidelity and immediacy - and the answer for performance is almost always immediacy.</li>
+      <li style="margin-bottom: 0.8em;"><strong>The audience needs to see what they're hearing.</strong> A purely audible quantum-music system is fine for headphones. A live performance asks for a visual layer that doesn't just decorate the music but reveals its structure. Pitch-driven colour, particles spawning at probability-cube corners, the visible asymmetry between entangled and non-entangled modes - these were the elements that made the system <em>legible</em> as quantum to people who don't read papers about it.</li>
+      <li style="margin-bottom: 0.8em;"><strong>Music is already mathematics.</strong> This project reinforced something I think a lot of musicians intuit but rarely articulate: translating quantum data into music isn't unnatural. It's a shift in scale and perspective. Rhythm is the division of time; pitch is frequency; harmony is ratio. What quantum systems offer is a different kind of structure - probabilistic, non-classical, but still mathematical. The challenge isn't turning maths into music. It's choosing which mathematical relationships are <em>meaningful enough to be heard</em>.</li>
+    </ol>
+
+    <h3 style="margin-top: 3rem;">Where it goes next.</h3>
+    <p>Three directions, in increasing order of ambition:</p>
+
+    <ol style="margin-left: 1.5rem; margin-bottom: 2rem;">
+      <li style="margin-bottom: 0.6em;">A multi-wall LED installation deployment, so the audience walks through the quantum state rather than watching it on a laptop screen.</li>
+      <li style="margin-bottom: 0.6em;">Full IBM Quantum hardware integration for non-real-time validation: pre-record measurement sequences from a real quantum processor and use them as the seed for compositions.</li>
+      <li style="margin-bottom: 0.6em;">Polyphony - multiple parallel circuits feeding multiple instruments, with entanglement <em>between</em> circuits so the harmonic relationships between voices are themselves quantum-correlated.</li>
+    </ol>
+
+    <p>Each of these is additive. None requires rebuilding what's already been built. The system, as it stands, is a foundation - and a working live instrument that I plan to keep performing on.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ===========================================================
+     FOOTER
+     =========================================================== -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h5>The project</h5>
+      <ul>
+        <li><a href="#concept">Concept</a></li>
+        <li><a href="#try">Try it</a></li>
+        <li><a href="#build">How it's built</a></li>
+        <li><a href="#why">Why it matters</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="https://qiskit.org" target="_blank" rel="noopener">Qiskit</a></li>
+        <li><a href="https://derivative.ca" target="_blank" rel="noopener">TouchDesigner</a></li>
+        <li><a href="https://mido.readthedocs.io" target="_blank" rel="noopener">Mido (MIDI)</a></li>
+        <li><a href="https://quantum.ibm.com" target="_blank" rel="noopener">IBM Quantum</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li>Krishna Kalesan</li>
+        <li><a href="mailto:krishnackalesan@gmail.com">krishnackalesan@gmail.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Krishna Kalesan</div>
+    <div></div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   1. PARTICLE BACKGROUND
+   ============================================================ */
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles;
+  const COUNT = 60;
+  const COLORS = ['#6B6FE0', '#E8A14C', '#79B8A2', '#A39B89'];
+
+  function resize() {
+    w = canvas.width  = window.innerWidth  * window.devicePixelRatio;
+    h = canvas.height = window.innerHeight * window.devicePixelRatio;
+    canvas.style.width  = window.innerWidth  + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+
+  function spawn() {
+    particles = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: (Math.random() * 1.4 + 0.4) * window.devicePixelRatio,
+      c: COLORS[Math.floor(Math.random() * COLORS.length)],
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.5) * 0.15,
+      a: Math.random() * 0.4 + 0.15,
+      pulse: Math.random() * Math.PI * 2,
+    }));
+  }
+
+  function step() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      p.pulse += 0.005;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      const a = p.a * (0.7 + 0.3 * Math.sin(p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = a;
+      ctx.shadowColor = p.c;
+      ctx.shadowBlur = p.r * 4;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(step);
+  }
+
+  resize(); spawn(); step();
+  window.addEventListener('resize', () => { resize(); spawn(); });
+})();
+
+/* ============================================================
+   2. LIVE QUANTUM-MUSIC DEMO
+   ============================================================ */
+(function() {
+  const SCALE = [60, 62, 64, 65, 67, 69, 71, 72];
+  const canvas = document.getElementById('demo-canvas');
+  const ctx = canvas.getContext('2d');
+  const measureBtn = document.getElementById('measureBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const entSwitch = document.getElementById('entSwitch');
+  const autoSwitch = document.getElementById('autoSwitch');
+  const led = document.getElementById('demoLed');
+  const shotCounter = document.getElementById('shotCounter');
+  const lastBinary = document.getElementById('lastBinary');
+  const lastIndex  = document.getElementById('lastIndex');
+  const lastNote   = document.getElementById('lastNote');
+  const lastFreq   = document.getElementById('lastFreq');
+  const distribution = document.getElementById('distribution');
+
+  let entangled = true;
+  let auto = false;
+  let autoInterval = null;
+  let counts = [0, 0, 0, 0, 0, 0, 0, 0];
+  let totalShots = 0;
+  let particles = [];
+  let lastIdx = null;
+
+  let audioCtx = null;
+  function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  function midiToFreq(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+
+  function playNote(midiNote, velocity = 0.4) {
+    initAudio();
+    const freq = midiToFreq(midiNote);
+    const t = audioCtx.currentTime;
+
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+    osc1.frequency.value = freq;
+    osc2.frequency.value = freq * 2;
+
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(velocity, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 2200;
+    filter.Q.value = 0.7;
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(filter);
+    filter.connect(audioCtx.destination);
+
+    osc1.start(t);
+    osc2.start(t);
+    osc1.stop(t + 1.5);
+    osc2.stop(t + 1.5);
+
+    return freq;
+  }
+
+  function measure() {
+    let idx;
+    if (entangled) {
+      idx = Math.random() < 0.5 ? 0 : 7;
+    } else {
+      idx = Math.floor(Math.random() * 8);
+    }
+    return idx;
+  }
+
+  function fireShot() {
+    const idx = measure();
+    const binary = idx.toString(2).padStart(3, '0');
+    const note = SCALE[idx];
+    const freq = playNote(note);
+
+    counts[idx]++;
+    totalShots++;
+    lastIdx = idx;
+
+    lastBinary.textContent = binary;
+    lastIndex.textContent  = idx;
+    lastNote.textContent   = note;
+    lastFreq.textContent   = freq.toFixed(1) + ' Hz';
+    shotCounter.textContent = 'Shots: ' + totalShots;
+
+    led.classList.add('on');
+    setTimeout(() => led.classList.remove('on'), 200);
+
+    const max = Math.max(...counts, 1);
+    const bars = distribution.querySelectorAll('.bar');
+    bars.forEach((bar, i) => {
+      const pct = (counts[i] / max) * 100;
+      bar.style.height = Math.max(4, pct * 0.6) + 'px';
+      bar.classList.toggle('fill', i === 0 || i === 7);
+      bar.classList.toggle('fill-warm', i !== 0 && i !== 7 && counts[i] > 0);
+    });
+
+    spawnParticleAt(idx, note);
+  }
+
+  function setupCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+  }
+  function cubeVertex(idx) {
+    const x = (idx >> 2) & 1;
+    const y = (idx >> 1) & 1;
+    const z = idx & 1;
+    const rect = canvas.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const s = Math.min(rect.width, rect.height) * 0.28;
+    const ix = (x - 0.5) * 2;
+    const iy = (y - 0.5) * 2;
+    const iz = (z - 0.5) * 2;
+    const px = cx + (ix - iz) * s * 0.9;
+    const py = cy + (iy * 1.2 + (ix + iz) * 0.45) * s * 0.6;
+    return { px, py };
+  }
+
+  function spawnParticleAt(idx, note) {
+    const { px, py } = cubeVertex(idx);
+    const t = (note - 60) / (72 - 60);
+    const r = Math.round(107 + (232 - 107) * t);
+    const g = Math.round(111 + (161 - 111) * t);
+    const b = Math.round(224 + ( 76 - 224) * t);
+    const colour = `rgb(${r}, ${g}, ${b})`;
+
+    for (let i = 0; i < 18; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 1.2 + 0.2;
+      particles.push({
+        x: px,
+        y: py,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1,
+        decay: 0.005 + Math.random() * 0.008,
+        size: Math.random() * 2 + 0.8,
+        colour,
+      });
+    }
+  }
+
+  function drawCube() {
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+
+    ctx.strokeStyle = 'rgba(242, 235, 221, 0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      for (let j = i + 1; j < 8; j++) {
+        const xor = i ^ j;
+        if (xor === 1 || xor === 2 || xor === 4) {
+          const a = cubeVertex(i);
+          const b = cubeVertex(j);
+          ctx.beginPath();
+          ctx.moveTo(a.px, a.py);
+          ctx.lineTo(b.px, b.py);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (let i = 0; i < 8; i++) {
+      const { px, py } = cubeVertex(i);
+      const isLast = i === lastIdx;
+      const radius = isLast ? 6 : 3;
+      const opacity = isLast ? 1 : 0.5;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fillStyle = i === 0 ? `rgba(107, 111, 224, ${opacity})` :
+                      i === 7 ? `rgba(232, 161, 76, ${opacity})` :
+                                `rgba(163, 155, 137, ${opacity * 0.5})`;
+      if (isLast) {
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 14;
+      }
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = isLast ? 'rgba(242, 235, 221, 0.9)' : 'rgba(163, 155, 137, 0.4)';
+      ctx.font = '10px JetBrains Mono, monospace';
+      const label = i.toString(2).padStart(3, '0');
+      ctx.fillText(label, px + 8, py + 4);
+    }
+  }
+
+  function drawParticles() {
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = p.colour;
+      ctx.globalAlpha = p.life * 0.7;
+      ctx.shadowColor = p.colour;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  }
+
+  function loop() {
+    drawCube();
+    drawParticles();
+    requestAnimationFrame(loop);
+  }
+
+  setupCanvas();
+  loop();
+  window.addEventListener('resize', setupCanvas);
+
+  entSwitch.addEventListener('click', () => {
+    entangled = !entangled;
+    entSwitch.classList.toggle('on', entangled);
+    entSwitch.setAttribute('aria-checked', entangled);
+  });
+  autoSwitch.addEventListener('click', () => {
+    auto = !auto;
+    autoSwitch.classList.toggle('on', auto);
+    autoSwitch.setAttribute('aria-checked', auto);
+    if (auto) {
+      autoInterval = setInterval(fireShot, 700);
+    } else {
+      clearInterval(autoInterval);
+    }
+  });
+  measureBtn.addEventListener('click', fireShot);
+  resetBtn.addEventListener('click', () => {
+    counts = [0, 0, 0, 0, 0, 0, 0, 0];
+    totalShots = 0;
+    lastIdx = null;
+    particles = [];
+    shotCounter.textContent = 'Shots: 0';
+    lastBinary.textContent = '—';
+    lastIndex.textContent = '—';
+    lastNote.textContent = '—';
+    lastFreq.textContent = '—';
+    distribution.querySelectorAll('.bar').forEach(b => {
+      b.style.height = '4px';
+      b.classList.remove('fill', 'fill-warm');
+    });
+  });
+})();
+
+/* ============================================================
+   3. AMBIENT AUDIO TOGGLE
+   ============================================================ */
+(function() {
+  const toggle = document.getElementById('audioToggle');
+  const label = toggle.querySelector('.label');
+  let on = false;
+  let actx = null;
+  let interval = null;
+  const SCALE = [60, 62, 64, 65, 67, 69, 71, 72];
+
+  function midiToFreq(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+
+  function ambientNote() {
+    if (!actx) return;
+    const idx = Math.random() < 0.5 ? 0 : 7;
+    const freq = midiToFreq(SCALE[idx]);
+    const t = actx.currentTime;
+    const osc = actx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const gain = actx.createGain();
+    gain.gain.value = 0;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.05, t + 1.5);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 5);
+    osc.connect(gain);
+    gain.connect(actx.destination);
+    osc.start(t);
+    osc.stop(t + 5.2);
+  }
+
+  toggle.addEventListener('click', () => {
+    on = !on;
+    toggle.classList.toggle('active', on);
+    toggle.setAttribute('aria-pressed', on);
+    label.textContent = on ? 'Listening' : 'Listen while reading';
+    if (on) {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+      ambientNote();
+      interval = setInterval(ambientNote, 4000);
+    } else {
+      clearInterval(interval);
+    }
+  });
+})();
+
+/* ============================================================
+   4. SCROLL FADE-IN
+   ============================================================ */
+(function() {
+  const els = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
