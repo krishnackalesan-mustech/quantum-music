@@ -762,7 +762,7 @@ footer {
       <span class="word">in</span>
       <span class="word music">music.</span>
     </h1>
-    <p class="hero-tagline">A live instrument that turns quantum measurement into music, in real time. Built to make the strangest physics in the universe playable.</p>
+    <p class="hero-tagline">A live instrument that translates quantum measurement into music in real time, designed to make the underlying physics of probabilistic computation audible, visible, and performable.</p>
   </div>
 
   <div class="hero-bottom">
@@ -780,34 +780,34 @@ footer {
 <section id="concept">
   <div class="col fade-in">
     <div class="section-label">
-      <span class="num">§ I</span>
+      <span class="num"> I</span>
       <span class="eyebrow">The concept</span>
     </div>
 
     <h2>What does a quantum computer <em>sound</em> like?</h2>
-    <p class="dropcap">For a hundred years quantum mechanics has told us something stubborn and strange about reality: at its smallest scale, the universe doesn't make decisions until it's asked. A particle isn't here <em>or</em> there - it's both, until it's measured. This is not a metaphor. It's the deepest, best-tested theory of the physical world we have, and it sits behind every transistor, every laser, every MRI scan.</p>
+    <p class="dropcap">Quantum mechanics describes a physical reality whose behaviour at the smallest scales differs fundamentally from classical intuition. A quantum system does not possess definite properties prior to measurement; rather, it exists in a superposition of possible states whose probabilities are described by a complex-valued wavefunction (Nielsen and Chuang, 2010). The act of measurement is therefore not an act of discovery but of selection: it forces the system to resolve into one of its possible outcomes, with a probability distribution determined by the prior state. This formulation, although counter-intuitive, has been confirmed by a century of experimental evidence and underpins technologies including the transistor, the laser, and magnetic resonance imaging (Griffiths, 2018).</p>
 
-    <p>Quantum computers are the first machines built to think in this language directly. They don't process ones and zeros so much as <em>probabilities</em> - vast clouds of possibility that collapse into definite answers only at the moment of measurement. They are very nearly the strangest engineering project humans have ever undertaken, and they will reshape cryptography, chemistry, drug discovery and machine learning over the coming decade.</p>
+    <p>Quantum computers are the first machines designed to exploit these principles directly for computation. Rather than encoding information in classical bits, they operate on qubits, which can exist in superposition and become entangled, producing correlations that cannot be reproduced by any classical system (Nielsen and Chuang, 2010). Significant resources are now being directed toward the development of quantum hardware and software. IBM, Google, and others have produced cloud-accessible quantum processors and predict substantial advances in the coming decade across cryptography, materials science, drug discovery, and machine learning (IBM Quantum, 2024).</p>
 
-    <p>This project asks a question those fields don't usually consider: if a quantum computer's natural language is probability, and music's natural language is the unfolding of events through time, what happens when you let the first speak through the second?</p>
+    <p>The question this project addresses is one that the dominant application areas do not consider: if a quantum computer's native language is probability, and music is the structured organisation of events through time, what occurs when the first is allowed to articulate itself through the second?</p>
 
-    <p>The answer, I've found, is a kind of music no human or conventional algorithm could compose. It is not random - randomness sounds like noise. It is <em>structured uncertainty</em>: notes that emerge from the actual mathematics of quantum measurement, biased by the same correlations physicists call <span class="text-cool italic">entanglement</span>, played in real time through a software synthesiser and shaped, on stage, by a performer.</p>
+    <p>The work presented here suggests that the result is neither random in the colloquial sense nor algorithmically conventional. It is, instead, what may be described as <em>structured uncertainty</em>: musical material whose generation is governed by the mathematics of quantum measurement, biased by the correlations that physicists term <span class="text-cool italic">entanglement</span> (Einstein, Podolsky and Rosen, 1935; Bell, 1964), rendered as audible MIDI events and shaped in performance through a hardware controller.</p>
 
     <div class="pillars">
       <div class="pillar">
         <div class="num">i.</div>
         <h3>Superposition</h3>
-        <p>A qubit doesn't pick a value until measured. Until then, it holds every possibility at once - a coin spinning in the air, not a coin on the table.</p>
+        <p>A qubit does not possess a definite value until measured. Prior to measurement, it occupies a linear combination of basis states, expressed mathematically by a wavefunction (Nielsen and Chuang, 2010).</p>
       </div>
       <div class="pillar">
         <div class="num">ii.</div>
         <h3>Measurement</h3>
-        <p>Observing the qubit collapses its possibilities into one definite outcome. The act of looking is what forces the universe to choose.</p>
+        <p>Observation collapses the qubit's superposition into a single definite outcome. The probability of each outcome is determined by the squared amplitude of the corresponding component of the wavefunction.</p>
       </div>
       <div class="pillar">
         <div class="num">iii.</div>
         <h3>Entanglement</h3>
-        <p>Two qubits can be linked so completely that their measurements stay correlated forever. This is the structure that turns noise into music.</p>
+        <p>Two or more qubits can be prepared in states whose measurement outcomes remain correlated regardless of separation. This non-classical correlation is the structural property exploited in this project to produce musically coherent material.</p>
       </div>
     </div>
 
@@ -817,9 +817,9 @@ footer {
       <div class="caption">Each glowing cluster is one quantum measurement. Eight corners - eight possible outcomes - but the universe never lights all of them.</div>
     </div>
 
-    <p class="pull">"Until you measure, every outcome is real at once. The act of looking is what forces the universe to choose."</p>
+    <p class="pull">"Prior to measurement, every outcome is, in a precise mathematical sense, equally real. Measurement is the act that forces a single outcome to emerge."</p>
 
-    <p>The piece you're about to hear in the next section is built on three qubits - eight possible measurement outcomes - mapped onto the notes of a musical scale. With entanglement on, only two of the eight outcomes are possible. With it off, all eight occur with equal probability. You can hear the difference. <em>That</em> is what makes this music quantum.</p>
+    <p>The piece presented in the following section is generated by a three-qubit circuit producing eight possible measurement outcomes, each mapped onto a note of a musical scale. When entanglement gates are applied to produce a Greenberger-Horne-Zeilinger (GHZ) state (Greenberger, Horne and Zeilinger, 1989), only two of the eight outcomes occur with non-zero probability. When the qubits are independent, all eight outcomes occur with equal probability. The audible difference between these two cases constitutes the project's central artistic claim.</p>
   </div>
 </section>
 
@@ -829,12 +829,12 @@ footer {
 <section id="try">
   <div class="col-wide fade-in">
     <div class="section-label">
-      <span class="num">§ II</span>
-      <span class="eyebrow">Try it yourself</span>
+      <span class="num"> II</span>
+      <span class="eyebrow">Try the system</span>
     </div>
 
     <h2>Listen to a quantum measurement.</h2>
-    <p>Below is a live, in-browser version of the same circuit that drives the full installation. It runs a 3-qubit simulation, plays the resulting note through your browser's audio engine, and visualises the eight possible measurement outcomes as the corners of a cube. Toggle entanglement on and off - and watch the distribution change.</p>
+    <p>The interactive demonstration below executes a browser-resident version of the same circuit that drives the full installation. It performs a three-qubit simulation, voices the resulting measurement through the Web Audio API, and visualises the eight possible outcomes as the corners of a cube. The user may toggle entanglement on or off and observe the change in the resulting probability distribution.</p>
 
     <div class="demo-shell">
       <div class="demo-header">
@@ -878,10 +878,10 @@ footer {
       </div>
     </div>
 
-    <p class="text-dim" style="font-size: 0.9rem;"><em>Note:</em> the simulator runs entirely in your browser - no server, no API. The audio is generated live by the Web Audio API. With entanglement enabled, the circuit is <code>H(0) → CX(0,1) → CX(1,2) → measure</code>, identical to the GHZ state used in the full installation.</p>
+    <p class="text-dim" style="font-size: 0.9rem;"><em>Note:</em> the simulator runs entirely in the browser, with no server-side computation or external API. Audio is generated by the Web Audio API. With entanglement enabled, the circuit is <code>H(0) → CX(0,1) → CX(1,2) → measure</code>, identical to the GHZ state used in the full installation (Greenberger, Horne and Zeilinger, 1989).</p>
 
-    <h3 style="margin-top: 5rem;">The system, running.</h3>
-    <p>What follows is a walkthrough of the live system in action - the Python script measuring three qubits continuously, the TouchDesigner display, and Logic Pro receiving MIDI and voicing every measurement through a software instrument. Each pad press on the controller switches scale or circuit mode, and you can see the change print to the terminal as the music shifts. The same data is simultaneously sent over OSC to TouchDesigner, which produces the visual layer shown earlier.</p>
+    <h3 style="margin-top: 5rem;">The system in operation.</h3>
+    <p>The recording that follows documents the live system in performance. The Python script measures three qubits continuously, the terminal records each scale and circuit-mode change initiated by the controller, and Logic Pro receives MIDI events and voices each measurement through a software instrument. Each pad press on the controller switches scale or circuit mode, and the corresponding state change is logged to the terminal as the music shifts. The same data is simultaneously transmitted via Open Sound Control (OSC) to TouchDesigner, which generates the visual layer presented earlier.</p>
 
     <div class="media">
       <video src="system-demo.mp4" controls poster="poster-system.jpg" preload="metadata"></video>
@@ -891,17 +891,17 @@ footer {
 </section>
 
 <!-- ===========================================================
-     III - HOW IT'S BUILT
+     III - SYSTEM ARCHITECTURE
      =========================================================== -->
 <section id="build">
   <div class="col fade-in">
     <div class="section-label">
       <span class="num">§ III</span>
-      <span class="eyebrow">How it's built</span>
+      <span class="eyebrow">System architecture</span>
     </div>
 
     <h2>The architecture.</h2>
-    <p>Five layers, in series. A quantum circuit generates a measurement; the measurement is mapped to a musical scale; the resulting MIDI is sent to a digital audio workstation; the same data is broadcast over OSC to a real-time visual engine; the performer shapes the result live with a hardware controller.</p>
+    <p>The system comprises five layers operating in series. A quantum circuit produces a measurement; the measurement is mapped onto a musical scale; the resulting MIDI is transmitted to a digital audio workstation; the same data is broadcast via Open Sound Control to a real-time visual engine; and the performer modulates the resulting output through a hardware controller during performance.</p>
 
     <div class="arch-diagram">
       <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System architecture diagram">
@@ -941,27 +941,27 @@ footer {
       <div class="stack-item">
         <div class="label">Quantum</div>
         <div class="name">Qiskit</div>
-        <p>IBM's open-source quantum framework. Constructs and simulates the 3-qubit circuit that drives every note. The same code can be run on real IBM hardware via the cloud.</p>
+        <p>An open-source quantum computing framework developed by IBM Research. Qiskit is used here to construct and simulate the three-qubit circuit that produces every note. The same code may be executed on physical IBM quantum processors via cloud submission (IBM Quantum, 2024).</p>
       </div>
       <div class="stack-item">
         <div class="label">Audio</div>
-        <div class="name">Mido + Logic Pro</div>
-        <p>MIDI is sent over a virtual IAC bus into Logic Pro, where any software instrument can voice the measurements. The system is timbre-agnostic - choose any sound.</p>
+        <div class="name">Mido and Logic Pro</div>
+        <p>MIDI events are transmitted via a virtual IAC bus into Logic Pro, where any software instrument may voice the measurements. The system is timbre-agnostic; the choice of instrument is a compositional decision made independently of the quantum layer.</p>
       </div>
       <div class="stack-item">
         <div class="label">Visual</div>
         <div class="name">TouchDesigner</div>
-        <p>OSC carries the same quantum data into a node-based visual engine. Particles spawn at cube corners corresponding to the measurement bits, coloured by pitch.</p>
+        <p>OSC messages convey the same quantum data to a node-based real-time visual engine (Derivative, 2024). Particle clusters are spawned at cube corners corresponding to the measurement bit-string, and their colour is mapped to pitch.</p>
       </div>
       <div class="stack-item">
         <div class="label">Performance</div>
         <div class="name">Akai MPK Mini</div>
-        <p>A pad and knob controller for live modulation. Switch scales, swap circuit modes, modulate tempo and density during performance.</p>
+        <p>A pad and knob controller used for live modulation. It enables the performer to switch musical scales, change circuit mode, and modulate tempo, density, and dynamics during performance.</p>
       </div>
     </div>
 
     <h3 style="margin-top: 4rem;">Live, from the terminal.</h3>
-    <p>The Python script is intentionally short - the project's value lies in what it routes, not in cleverness of code. Below: the source on top and the live terminal at the bottom. Each pad press on the MPK Mini prints a line - <code>scale → Blues</code>, <code>mode → GHZ</code>, <code>PANIC: all notes off</code> - proving the loop is running, listening, and switching state in real time as the performer plays.</p>
+    <p>The Python source is intentionally compact; the value of the project lies in its routing rather than the complexity of any individual component. The recording below presents the source on the upper portion of the screen and the live terminal output on the lower. Each pad press on the MPK Mini produces a corresponding line of output, for example <code>scale → Blues</code>, <code>mode → GHZ</code>, or <code>PANIC: all notes off</code>, demonstrating that the loop is operating, listening for controller input, and switching state in real time during performance.</p>
 
     <div class="media">
       <video src="code-walkthrough.mp4" controls poster="poster-code.jpg" preload="metadata" muted></video>
@@ -969,7 +969,7 @@ footer {
     </div>
 
     <h3 style="margin-top: 4rem;">The core loop.</h3>
-    <p>Stripped to its essentials, the engine of the whole system fits in twenty lines.</p>
+    <p>Reduced to its essential elements, the engine of the system can be expressed in fewer than twenty lines of Python.</p>
 
     <pre class="code"><span class="c"># quantum_live.py - the heart of the system</span>
 <span class="k">from</span> qiskit <span class="k">import</span> QuantumCircuit
@@ -999,61 +999,70 @@ footer {
     time.sleep(0.4)
     port.send(mido.Message(<span class="s">'note_off'</span>, note=note, velocity=0))</pre>
 
-    <h3 style="margin-top: 4rem;">Three modes of being quantum.</h3>
-    <p>The performer can switch between three different quantum circuits live, each producing a distinct musical character:</p>
+    <h3 style="margin-top: 4rem;">Three modes of quantum behaviour.</h3>
+    <p>The performer is able to switch between three different quantum circuits in real time, each producing a distinct musical character:</p>
 
     <ul style="margin-left: 1.5rem; margin-bottom: 2rem;">
-      <li style="margin-bottom: 0.6em;"><strong class="text-cool">GHZ mode</strong> - three qubits maximally entangled. Only two measurement outcomes are possible: <code>000</code> or <code>111</code>. The result is starkly minimal - two notes, alternating, far apart in pitch.</li>
-      <li style="margin-bottom: 0.6em;"><strong class="text-mid">BELL mode</strong> - two qubits entangled, one free. Four outcomes occur with equal probability. The most musical setting - paired notes that always rise or fall together.</li>
-      <li style="margin-bottom: 0.6em;"><strong class="text-warm">FREE mode</strong> - three independent superpositions, no entanglement. All eight notes occur with equal probability. The least quantum, but the most melodically varied.</li>
+      <li style="margin-bottom: 0.6em;"><strong class="text-cool">GHZ mode</strong> — three qubits prepared in a maximally entangled GHZ state. Only two measurement outcomes occur with non-zero probability: <code>000</code> or <code>111</code>. The musical result is sparse and binary, alternating between two notes at the extremes of the chosen scale.</li>
+      <li style="margin-bottom: 0.6em;"><strong class="text-mid">BELL mode</strong> — two qubits entangled in a Bell state, with the third qubit independent. Four outcomes occur with equal probability. This produces what is, in practice, the most musical setting, in which paired notes ascend or descend together.</li>
+      <li style="margin-bottom: 0.6em;"><strong class="text-warm">FREE mode</strong> — three independent superpositions, with no entanglement applied. All eight outcomes occur with equal probability. This produces the most melodically varied output, but the least overtly quantum-correlated structure.</li>
     </ul>
 
-    <p>The mode itself becomes a compositional parameter. Switching from GHZ to FREE during a performance is the quantum equivalent of changing key - except what's changing isn't the harmony, it's how much <em>quantum-ness</em> is shaping the music in that moment.</p>
+    <p>The choice of circuit thereby becomes a compositional parameter. Switching from GHZ to FREE during performance is, in functional terms, equivalent to changing key in a conventional musical setting; the difference is that what changes is not the harmonic centre but the degree to which quantum correlations are shaping the output.</p>
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- ===========================================================
-     IV - WHY THIS MATTERS
+     IV - SIGNIFICANCE
      =========================================================== -->
 <section id="why">
   <div class="col fade-in">
     <div class="section-label">
       <span class="num">§ IV</span>
-      <span class="eyebrow">Why this matters</span>
+      <span class="eyebrow">Significance</span>
     </div>
 
     <h2>Music technology meets the next computational paradigm.</h2>
 
-    <p>The history of music technology is the history of new physical principles being borrowed into the studio. The valve gave us the electric guitar. The transistor gave us the synthesiser. Digital signal processing gave us sampling, plug-ins, the entire modern producer's toolkit. Each of these waves of innovation began far outside music - in defence labs, in computer science departments, in radio engineering - and arrived in our practice through the work of artists willing to misuse the new tools until they sang.</p>
+    <p>The history of music technology is, in significant part, the history of physical principles being adopted from other fields and adapted to musical use. The vacuum tube, originally developed for radio communication, made the electric guitar amplifier possible (Théberge, 1997). The transistor, invented at Bell Laboratories in 1947, enabled the synthesisers of Robert Moog and Donald Buchla in the 1960s (Pinch and Trocco, 2002). Digital signal processing, which arose from research in telecommunications and military signal analysis, became the foundation of sampling, software-based instruments, and the contemporary digital audio workstation (Roads, 1996). In each instance, the technology originated outside music and entered it through the work of practitioners willing to repurpose it for creative ends.</p>
 
-    <p>Quantum computing is the next of those waves, and it has barely begun to touch music. A handful of pioneering projects have explored the territory: Eduardo Reck Miranda's research on <em>quantum computer music</em> at the University of Plymouth has produced compositions that use real quantum hardware as a generative source [1]. Omar Costa Hamido's <em>Quantum Synth</em> proposes circuits as instruments in their own right [2]. The <em>Quantum Music Playground</em> from IBM Research re-imagines the qubit as a tile in a step sequencer [3]. These are early experiments in what will become a much larger field.</p>
+    <p>Quantum computing constitutes a candidate for the next such transition, although its uptake within music has so far been limited to a small body of pioneering work. Miranda (2022a) provides the most comprehensive treatment of the field to date, presenting both theoretical foundations and practical compositional methods. His own compositions, including <em>Zeno</em> (2022b), have used real quantum hardware as a generative source. Hamido (2020) has developed the <em>QAC Toolkit</em> for Max/MSP, allowing composers to design quantum circuits within an environment already familiar to electronic musicians. Weaver et al. (2023) at IBM Research have produced the <em>Quantum Music Playground</em>, a web-based step sequencer in which each row of the interface corresponds to a qubit. These works represent early experiments in what is likely to develop into a more substantial sub-field of music technology.</p>
 
-    <p>What's distinctive about this project, I hope, is not the use of quantum measurements - others have done that - but the integration. The quantum layer, the audio engine, the immersive visualisation, and the hardware controller all run as one continuous, performable system. The performer is not pressing a button to trigger a recording. They are <em>playing</em> a quantum process, with their hands, in real time.</p>
+    <p>The contribution of the present project is not in the use of quantum measurements as a generative source, which has been demonstrated previously (Miranda, 2022a; Hamido, 2020), but in the integration of the quantum layer with a real-time audio engine, an immersive visualisation system, and a hardware controller, all of which operate as a single continuous performable instrument. The performer is not simply triggering a pre-rendered output: they are operating a quantum process during performance, with direct, gestural control over its musical and visual expression.</p>
 
-    <p class="pull">"What's at stake here is not whether quantum computing makes interesting music. It clearly can. The question is what music will become when the strangeness of the physical world becomes part of the musician's vocabulary."</p>
+    <p class="pull">"The question is not whether quantum computing can produce interesting musical material — that has been demonstrated. The question is what music will become as the structures of quantum mechanics enter the working vocabulary of practising musicians."</p>
 
-    <p>Within five years, quantum hardware will be substantially more accessible than it is today. Cloud APIs from IBM, Google, IonQ and others already let any musician with a laptop send a circuit to a real quantum processor and hear back a result in seconds. The technical barrier has fallen dramatically, even since this project started. What hasn't yet developed is the artistic vocabulary - the techniques, conventions, and aesthetic instincts that turn a new technology into a living musical practice. That vocabulary will be built by musicians, not physicists.</p>
+    <p>Quantum hardware is becoming progressively more accessible. Cloud-based platforms operated by IBM, Google, IonQ, and others now permit researchers, students, and artists to submit circuits to physical quantum processors and receive results within seconds, subject to queueing (IBM Quantum, 2024). Free and educational tiers exist; the technical barrier has reduced significantly within the past five years (Cross, 2018). What has not yet developed at comparable pace is the artistic vocabulary: the techniques, conventions, and aesthetic instincts through which a new computational paradigm is translated into musical practice. As with previous technological transitions in music, this vocabulary is more likely to be developed by musicians than by physicists or engineers (Théberge, 1997).</p>
 
-    <p>This project is one small contribution to that vocabulary. It demonstrates that quantum-driven music can be expressive, controllable, performable, and immediate - not just an academic curiosity, but a real instrument that you can stand behind and play.</p>
+    <p>The present project is offered as one contribution toward that emerging vocabulary. It demonstrates that quantum-driven music can be made expressive, controllable, and immediate, and that it can function not only as an academic curiosity but as a performable instrument suitable for live presentation.</p>
 
     <div class="references">
-      <h4>References &amp; further reading</h4>
+      <h4>References</h4>
       <ol>
-        <li><em>Eduardo Reck Miranda</em> - <em>Quantum Computer Music: Foundations, Methods and Advanced Concepts</em> (Springer, 2022). The foundational text on the field; covers theory, history, and practical methods for composing with quantum circuits.</li>
-        <li><em>Omar Costa Hamido</em> - <em>Quantum Synth</em> and <em>QAC Toolkit</em>. A composer-researcher developing software that brings quantum circuit design directly into Max/MSP.</li>
-        <li><em>James Weaver et al.</em> - <em>Quantum Music Playground</em> (IBM Research). A web-based step sequencer where each row is a qubit, demonstrating quantum measurement as compositional material.</li>
-        <li><em>IBM Quantum</em> - Qiskit documentation and free cloud access to real quantum processors. <a href="https://qiskit.org" target="_blank" rel="noopener">qiskit.org</a></li>
-        <li><em>Derivative</em> - TouchDesigner reference and community. <a href="https://derivative.ca" target="_blank" rel="noopener">derivative.ca</a></li>
-        <li><em>ISMIR</em> &amp; <em>NIME</em> - Music technology conferences (International Society for Music Information Retrieval; New Interfaces for Musical Expression) where quantum-driven systems have begun to appear as papers and performances.</li>
+        <li>Bell, J. S. (1964) 'On the Einstein Podolsky Rosen paradox', <em>Physics Physique Fizika</em>, 1(3), pp. 195-200.</li>
+        <li>Cross, A. (2018) 'The IBM Q experience and Qiskit open-source quantum computing software', <em>Bulletin of the American Physical Society</em>, March Meeting 2018, abstract L58.003.</li>
+        <li>Derivative (2024) <em>TouchDesigner documentation</em>. Available at: <a href="https://derivative.ca" target="_blank" rel="noopener">https://derivative.ca</a> (Accessed: April 2026).</li>
+        <li>Einstein, A., Podolsky, B. and Rosen, N. (1935) 'Can quantum-mechanical description of physical reality be considered complete?', <em>Physical Review</em>, 47(10), pp. 777-780.</li>
+        <li>Greenberger, D. M., Horne, M. A. and Zeilinger, A. (1989) 'Going beyond Bell's theorem', in Kafatos, M. (ed.) <em>Bell's theorem, quantum theory and conceptions of the universe</em>. Dordrecht: Kluwer Academic, pp. 69-72.</li>
+        <li>Griffiths, D. J. (2018) <em>Introduction to quantum mechanics</em>. 3rd edn. Cambridge: Cambridge University Press.</li>
+        <li>Hamido, O. C. (2020) <em>Quantum-Computer-Music: a tool for composing with quantum mechanics</em>. PhD thesis. University of California, Irvine.</li>
+        <li>IBM Quantum (2024) <em>Qiskit documentation and IBM Quantum Platform</em>. Available at: <a href="https://qiskit.org" target="_blank" rel="noopener">https://qiskit.org</a> and <a href="https://quantum.ibm.com" target="_blank" rel="noopener">https://quantum.ibm.com</a> (Accessed: April 2026).</li>
+        <li>Miranda, E. R. (ed.) (2022a) <em>Quantum computer music: foundations, methods and advanced concepts</em>. Cham: Springer.</li>
+        <li>Miranda, E. R. (2022b) 'Creative quantum computing: inverse FFT, sound synthesis, adaptive sequencing and musical composition', in Miranda, E. R. (ed.) <em>Quantum computer music</em>. Cham: Springer, pp. 121-158.</li>
+        <li>Nielsen, M. A. and Chuang, I. L. (2010) <em>Quantum computation and quantum information</em>. 10th anniversary edn. Cambridge: Cambridge University Press.</li>
+        <li>Pinch, T. and Trocco, F. (2002) <em>Analog days: the invention and impact of the Moog synthesizer</em>. Cambridge, MA: Harvard University Press.</li>
+        <li>Roads, C. (1996) <em>The computer music tutorial</em>. Cambridge, MA: MIT Press.</li>
+        <li>Théberge, P. (1997) <em>Any sound you can imagine: making music / consuming technology</em>. Hanover, NH: Wesleyan University Press.</li>
+        <li>Weaver, J., Carrera, J., Garcia, J. and Watrous, J. (2023) <em>Quantum Music Playground</em>. IBM Research. Available at: <a href="https://github.com/JavaFXpert/quantum-music-playground" target="_blank" rel="noopener">https://github.com/JavaFXpert/quantum-music-playground</a> (Accessed: April 2026).</li>
       </ol>
     </div>
   </div>
 </section>
 
 <!-- ===========================================================
-     V - REFLECTION
+     V - PROCESS
      =========================================================== -->
 <section id="reflection">
   <div class="col fade-in">
@@ -1062,45 +1071,45 @@ footer {
       <span class="eyebrow">Reflection</span>
     </div>
 
-    <h2>How I worked.</h2>
+    <h2>Process and methodology.</h2>
 
-    <p>This project came about because I was curious. During my placement, I attended a music technology event where I was first introduced to quantum computing in a creative context. The idea stayed with me. I began going to talks, visiting exhibitions across London, and learning Qiskit so I could work with quantum systems hands-on.</p>
+    <p>The project originated during my professional placement, at which I attended a music technology event that introduced quantum computing in a creative context. The conceptual implications of that introduction prompted further investigation, including attendance at related talks and exhibitions in London and a sustained period of self-directed study using the Qiskit framework, in order to develop practical familiarity with quantum systems.</p>
 
-    <p>The work itself unfolded in three loops.</p>
+    <p>The development of the project proceeded through three iterative phases.</p>
 
-    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">1. Getting to know the system.</h4>
-    <p>I started by building simple quantum circuits and watching how they behaved. I plotted probability distributions and used the Bloch sphere as a mental model for how qubit states evolve. None of this was about music yet - it was about developing an intuition for a system whose rules are genuinely strange.</p>
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">1. System familiarisation.</h4>
+    <p>The first phase comprised the construction of simple quantum circuits and the observation of their behaviour. Probability distributions were plotted, and the Bloch sphere was used as a conceptual model for the evolution of qubit states. This phase was concerned with developing intuition for a system whose underlying rules are non-classical, rather than with musical output.</p>
 
-    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">2. Learning to listen.</h4>
-    <p>The next loop was about translation. I converted quantum measurements into MIDI and brought them into Logic Pro. At first the results sounded completely random, and that forced me to question what <em>musical</em> actually means in this context.</p>
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">2. Translation to musical material.</h4>
+    <p>The second phase concerned translation. Quantum measurements were converted into MIDI events and routed into Logic Pro. The initial output was perceptually indistinguishable from random noise, which raised the methodological question of what constitutes <em>musical</em> material in this context.</p>
 
-    <p>The shift came when I stopped treating the quantum part as a randomness generator and started treating it as a compositional tool. A simple superposition - three independent Hadamard gates - produces a flat, uniform distribution: that's not music, that's noise. But when I introduced entanglement, particularly GHZ states with their perfect correlations between qubits, the data became structured. Notes started to relate to each other. The output stopped sounding like a random number generator and started sounding like a system with internal logic.</p>
+    <p>The methodological turning point of the project occurred when I ceased to treat the quantum component as a source of randomness and began to treat it as a structural compositional element. A simple superposition produced by three independent Hadamard gates yields a uniform probability distribution and is therefore equivalent, for musical purposes, to a classical random source. The introduction of entanglement, particularly through the GHZ state with its characteristic correlation between qubits, produced output with internal structure: notes related to one another, and the result ceased to resemble pseudo-random output and began to exhibit the qualities of a system governed by an internal logic.</p>
 
-    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">3. Building the instrument.</h4>
-    <p>The final loop was about integration and performance. I connected Python with TouchDesigner so the visuals could update in real time. I added the MPK Mini as a control surface. I worked on reducing latency until the relationship between gesture, sound, and image became <em>perceptible</em> to an audience - which is the threshold that separates a software demo from a musical instrument.</p>
+    <h4 style="margin-top: 2rem; color: var(--ink); font-style: normal;">3. Construction of the instrument.</h4>
+    <p>The third phase addressed integration and live performance. Python was connected to TouchDesigner to enable real-time visual updates. The MPK Mini was integrated as a control surface. Latency was reduced until the relationship between gesture, sound, and image was perceptible to a viewer, which constitutes the threshold separating a software demonstration from a musical instrument suitable for live use.</p>
 
-    <p>Each loop involved trial, failure, and adjustment, but together they shaped a system in which quantum behaviour can be experienced rather than just observed.</p>
+    <p>Each phase involved a sequence of trial, failure, and adjustment. Their cumulative effect was the development of a system in which quantum behaviour can be experienced through performance rather than only observed in the abstract.</p>
 
-    <h3 style="margin-top: 3rem;">What I learned.</h3>
-    <p>Four things, in roughly this order of importance:</p>
-
-    <ol style="margin-left: 1.5rem; margin-bottom: 2rem;">
-      <li style="margin-bottom: 0.8em;"><strong>The interface is the project.</strong> Quantum mathematics is well-documented; music technology is well-documented; the bridge between them is where the real work lives. Decisions about <em>what</em> to surface - entanglement rather than just measurement; circuit-mode switching as a compositional control; pitch-driven colour as a visual link - are the substance of the project, not its implementation.</li>
-      <li style="margin-bottom: 0.8em;"><strong>Real-time matters more than physical authenticity.</strong> I chose Qiskit's local simulator over IBM's real hardware because the latency from cloud quantum processors makes live performance impossible. The physics is identical; the timing is not. This is a recurring tension in music technology - between fidelity and immediacy - and the answer for performance is almost always immediacy.</li>
-      <li style="margin-bottom: 0.8em;"><strong>The audience needs to see what they're hearing.</strong> A purely audible quantum-music system is fine for headphones. A live performance asks for a visual layer that doesn't just decorate the music but reveals its structure. Pitch-driven colour, particles spawning at probability-cube corners, the visible asymmetry between entangled and non-entangled modes - these were the elements that made the system <em>legible</em> as quantum to people who don't read papers about it.</li>
-      <li style="margin-bottom: 0.8em;"><strong>Music is already mathematics.</strong> This project reinforced something I think a lot of musicians intuit but rarely articulate: translating quantum data into music isn't unnatural. It's a shift in scale and perspective. Rhythm is the division of time; pitch is frequency; harmony is ratio. What quantum systems offer is a different kind of structure - probabilistic, non-classical, but still mathematical. The challenge isn't turning maths into music. It's choosing which mathematical relationships are <em>meaningful enough to be heard</em>.</li>
-    </ol>
-
-    <h3 style="margin-top: 3rem;">Where it goes next.</h3>
-    <p>Three directions, in increasing order of ambition:</p>
+    <h3 style="margin-top: 3rem;">Findings.</h3>
+    <p>Four reflections emerged from the project, presented here in approximate order of significance:</p>
 
     <ol style="margin-left: 1.5rem; margin-bottom: 2rem;">
-      <li style="margin-bottom: 0.6em;">A multi-wall LED installation deployment, so the audience walks through the quantum state rather than watching it on a laptop screen.</li>
-      <li style="margin-bottom: 0.6em;">Full IBM Quantum hardware integration for non-real-time validation: pre-record measurement sequences from a real quantum processor and use them as the seed for compositions.</li>
-      <li style="margin-bottom: 0.6em;">Polyphony - multiple parallel circuits feeding multiple instruments, with entanglement <em>between</em> circuits so the harmonic relationships between voices are themselves quantum-correlated.</li>
+      <li style="margin-bottom: 0.8em;"><strong>The interface is the project.</strong> Quantum mathematics is well-documented, and music technology is well-documented; the work of the project is in the interface between them. Decisions concerning <em>which</em> features to surface — entanglement rather than measurement alone, circuit-mode switching as a compositional control, pitch-driven colour as a visual link — constitute the substantive contribution of the work, rather than its technical implementation.</li>
+      <li style="margin-bottom: 0.8em;"><strong>Real-time responsiveness takes priority over physical authenticity.</strong> The Qiskit local simulator was selected over IBM's cloud quantum hardware because the latency associated with real hardware submission renders live performance impractical. The simulated output is statistically equivalent to that of physical hardware (Nielsen and Chuang, 2010); the difference lies in timing, not in physics. This represents a recurring tension within music technology, between fidelity and immediacy, and within the context of live performance the resolution of that tension typically favours immediacy.</li>
+      <li style="margin-bottom: 0.8em;"><strong>Audience comprehension requires visual reinforcement.</strong> A purely auditory quantum-music system is acceptable for private listening. Live performance, however, requires a visual layer that does not merely decorate the audio but renders its underlying structure perceptible. Pitch-driven colour, particle clusters spawning at probability-cube corners, and the visible asymmetry between entangled and non-entangled modes were the elements that rendered the system legible as quantum to viewers without prior expertise in the field.</li>
+      <li style="margin-bottom: 0.8em;"><strong>Music is, in fundamental respects, mathematics.</strong> The project reinforced an observation often intuited by musicians but rarely stated explicitly: the translation of quantum data into music is not unnatural. Rhythm is the division of time, pitch is frequency, and harmony is ratio. What quantum systems contribute is a different category of structure — probabilistic and non-classical, but no less mathematical. The challenge of the work was therefore not the conversion of mathematics into music, but the selection of <em>which mathematical relationships are sufficiently meaningful to be worth hearing</em>.</li>
     </ol>
 
-    <p>Each of these is additive. None requires rebuilding what's already been built. The system, as it stands, is a foundation - and a working live instrument that I plan to keep performing on.</p>
+    <h3 style="margin-top: 3rem;">Future work.</h3>
+    <p>Three directions for further development are identified, in increasing order of ambition:</p>
+
+    <ol style="margin-left: 1.5rem; margin-bottom: 2rem;">
+      <li style="margin-bottom: 0.6em;">Deployment as a multi-wall LED installation, in which the audience would inhabit the visual field rather than observe it from outside.</li>
+      <li style="margin-bottom: 0.6em;">Integration with IBM Quantum cloud hardware for non-real-time validation, in which measurement sequences obtained from a physical quantum processor are pre-recorded and used as compositional material (IBM Quantum, 2024).</li>
+      <li style="margin-bottom: 0.6em;">Polyphonic extension, in which multiple parallel circuits feed multiple voices, with entanglement applied across circuits so that the harmonic relationships between voices are themselves quantum-correlated.</li>
+    </ol>
+
+    <p>Each of these is additive in nature: none requires the reconstruction of the existing system. The current implementation should therefore be understood both as a completed instrument suitable for live performance and as a foundation for further development.</p>
   </div>
 </section>
 
@@ -1116,7 +1125,7 @@ footer {
       <ul>
         <li><a href="#concept">Concept</a></li>
         <li><a href="#try">Try it</a></li>
-        <li><a href="#build">How it's built</a></li>
+        <li><a href="#build">System architecture</a></li>
         <li><a href="#why">Why it matters</a></li>
         <li><a href="#reflection">Reflection</a></li>
       </ul>
